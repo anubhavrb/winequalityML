@@ -75,7 +75,7 @@ def standardize(data):
     m = numpy.mean(a)
     std_dev = numpy.std(a)
     for i in range(len(data)):
-        data[i] = (data[i] - m)/std_dev
+        data[i] = (data[i] - m)/std_dev # z-score for data point
 
 if __name__ == "__main__":
     main()
