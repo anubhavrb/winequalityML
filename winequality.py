@@ -1,3 +1,4 @@
+import numpy
 import csv
 
 def main():
@@ -16,6 +17,11 @@ def main():
 
     read_file(fix_acid, vol_acid, cit_acid, res_sugar, chlorides, free_so2,
             total_so2, density, pH, sulphates, alcohol, quality)
+
+    standardize_all(fix_acid, vol_acid, cit_acid, res_sugar, chlorides, free_so2,
+            total_so2, density, pH, sulphates, alcohol)
+
+    print pH
 
 """
 Function to read in the features and target and store in the appropriate lists.
@@ -40,6 +46,36 @@ def read_file(fix_acid, vol_acid, cit_acid, res_sugar, chlorides, free_so2,
             sulphates.append(float(row[9]))
             alcohol.append(float(row[10]))
             quality.append(float(row[11]))
+
+"""
+Function to separately standardize the lists of features using the
+standardizations (z-score) method.
+"""
+def standardize_all(fix_acid, vol_acid, cit_acid, res_sugar, chlorides, free_so2,
+        total_so2, density, pH, sulphates, alcohol):
+
+    standardize(fix_acid)
+    standardize(vol_acid)
+    standardize(cit_acid)
+    standardize(res_sugar)
+    standardize(chlorides)
+    standardize(free_so2)
+    standardize(total_so2)
+    standardize(density)
+    standardize(pH)
+    standardize(sulphates)
+    standardize(alcohol)
+
+"""
+Function that standardizes the input list.
+"""
+def standardize(data):
+    # Use numpy mean and std functions.
+    a = numpy.array(data)
+    m = numpy.mean(a)
+    std_dev = numpy.std(a)
+    for i in range(len(data)):
+        data[i] = (data[i] - m)/std_dev
 
 if __name__ == "__main__":
     main()
