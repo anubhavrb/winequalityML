@@ -1,27 +1,44 @@
 import numpy
+from sklearn import preprocessing
+from sklearn.linear_model import SGDClassifier
 import csv
 
 def main():
-    fix_acid = [] # fixed acidity
-    vol_acid = [] # volatile acidity
-    cit_acid = [] # citric acid
-    res_sugar = [] # residual sugar
-    chlorides = [] # chlorides
-    free_so2 = [] # free sulfur dioxode
-    total_so2 = [] # total sulfur dioxide
-    density = [] # density
-    pH = [] # pH
-    sulphates = [] # sulphates
-    alcohol = [] # alcohol
-    quality = [] # quality
+    # fix_acid = [] # fixed acidity
+    # vol_acid = [] # volatile acidity
+    # cit_acid = [] # citric acid
+    # res_sugar = [] # residual sugar
+    # chlorides = [] # chlorides
+    # free_so2 = [] # free sulfur dioxode
+    # total_so2 = [] # total sulfur dioxide
+    # density = [] # density
+    # pH = [] # pH
+    # sulphates = [] # sulphates
+    # alcohol = [] # alcohol
+    # quality = [] # quality
+    #
+    # read_file(fix_acid, vol_acid, cit_acid, res_sugar, chlorides, free_so2,
+    #         total_so2, density, pH, sulphates, alcohol, quality)
 
-    read_file(fix_acid, vol_acid, cit_acid, res_sugar, chlorides, free_so2,
-            total_so2, density, pH, sulphates, alcohol, quality)
+    data = []
+    data_scaled = []
+    target = []
 
-    standardize_all(fix_acid, vol_acid, cit_acid, res_sugar, chlorides, free_so2,
-            total_so2, density, pH, sulphates, alcohol)
+    with open("winequality-red.csv") as csvfile:
+        csvfile.readline()
+        data = numpy.loadtxt(csvfile, delimiter = ';')
+        target = data[:, 11]
+        data = numpy.delete(data, [11], axis = 1)
+        data_scaled = preprocessing.scale(data)
 
-    print pH
+    tragte = [target]
+    clf = SGDClassifier()
+    clf.fit(data_scaled, target)
+
+    print clf.predict(data[3])
+
+    #standardize_all(fix_acid, vol_acid, cit_acid, res_sugar, chlorides, free_so2,
+            #total_so2, density, pH, sulphates, alcohol)
 
 """
 Function to read in the features and target and store in the appropriate lists.
@@ -29,8 +46,9 @@ Function to read in the features and target and store in the appropriate lists.
 def read_file(fix_acid, vol_acid, cit_acid, res_sugar, chlorides, free_so2,
         total_so2, density, pH, sulphates, alcohol, quality):
 
-    with open("winequality-red.csv") as csvfile:
-        next(csvfile) # skip header row
+
+
+        """next(csvfile) # skip header row
         readCSV = csv.reader(csvfile, delimiter = ';')
 
         for row in readCSV:
@@ -46,6 +64,7 @@ def read_file(fix_acid, vol_acid, cit_acid, res_sugar, chlorides, free_so2,
             sulphates.append(float(row[9]))
             alcohol.append(float(row[10]))
             quality.append(float(row[11]))
+        """
 
 """
 Function to separately standardize the lists of features using the
@@ -79,3 +98,12 @@ def standardize(data):
 
 if __name__ == "__main__":
     main()
+
+"""
+def predict_fit(fix_acid, vol_acid, cit_acid, res_sugar, chlorides, free_so2,
+        total_so2, density, pH, sulphates, alcohol):
+    X = numpy.array(
+    Y = numpy.array(quality)
+    clf = linear_model.SGDClassifier()
+    clf.fit(X, Y)
+"""
