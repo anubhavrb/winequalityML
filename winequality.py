@@ -39,6 +39,10 @@ Function that splits the dataset into a 60:20:20 split.
 """
 def split(df):
     train, validate, test = np.split(df.sample(frac=1), [int(.6*len(df)), int(.8*len(df))])
-    return (train.loc[:, 'fixed acidity':'alcohol'], train['quality'],
-        validate.loc[:, 'fixed acidity':'alcohol'],
-        test.loc[:, 'fixed acidity':'alcohol'])
+    return (train, validate, test)
+
+"""
+Function that splits the input dataframe into its features and targets.
+"""
+def get_XY(df):
+    return (df.loc[:, 'fixed acidity':'alcohol'], df['quality']) 
