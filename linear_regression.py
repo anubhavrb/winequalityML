@@ -1,10 +1,9 @@
 from sklearn import linear_model
-from sklearn.metrics import r2_score
 from winequality import get_preprocessed_dataset, get_XY
 
-def run_model():
+def run_model(filename):
 
-    train, validate, test = get_preprocessed_dataset('winequality-white.csv')
+    train, validate, test = get_preprocessed_dataset(filename)
 
     train_X, train_Y = get_XY(train)
     validate_X, validate_Y = get_XY(validate)
@@ -12,9 +11,8 @@ def run_model():
     regr = linear_model.LinearRegression()
     regr.fit(train_X, train_Y)
 
-    pred_Y = regr.predict(validate_X)
-
-    return r2_score(validate_Y, pred_Y)
+    return regr.score(validate_X, validate_Y)
 
 if __name__ == "__main__":
-    print run_model()
+    print run_model('winequality-red.csv')
+    print run_model('winequality-white.csv')
