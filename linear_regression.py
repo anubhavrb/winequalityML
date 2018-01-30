@@ -3,16 +3,19 @@ from winequality import get_preprocessed_dataset, get_XY
 
 def run_model(filename):
 
-    train, validate, test = get_preprocessed_dataset(filename)
+    total_score = 0
+    for i in range(50):
+        train, validate, test = get_preprocessed_dataset(filename)
 
-    train_X, train_Y = get_XY(train)
-    validate_X, validate_Y = get_XY(validate)
+        train_X, train_Y = get_XY(train)
+        validate_X, validate_Y = get_XY(validate)
 
-    regr = linear_model.LinearRegression()
-    regr.fit(train_X, train_Y)
+        regr = linear_model.LinearRegression()
+        regr.fit(train_X, train_Y)
 
-    return regr.score(validate_X, validate_Y)
+        total_score = total_score + regr.score(validate_X, validate_Y)
+
+    return total_score/50
 
 if __name__ == "__main__":
-    print run_model('winequality-red.csv')
     print run_model('winequality-white.csv')
