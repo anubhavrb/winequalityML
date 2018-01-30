@@ -1,0 +1,12 @@
+All features:
+Red wine
+0.4994375
+White wine
+0.424265306122
+
+Feature selection:
+Red wine - 'fixed acidity', 'volatile acidity', 'citric acid', 'chlorides','total sulfur dioxide','density','sulphates','alcohol'
+0.4986875
+
+White wine - 'fixed acidity', 'volatile acidity', 'chlorides','total sulfur dioxide','density','sulphates', 'pH', 'residual sugar', 'alcohol'
+0.424673469388

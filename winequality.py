@@ -8,7 +8,8 @@ functions.
 def get_preprocessed_dataset(filename):
     df = read_file(filename)
     standardize(df)
-    df = shuffle_data(df)
+    #df = df[['fixed acidity', 'volatile acidity', 'citric acid', 'chlorides','total sulfur dioxide','density','sulphates','alcohol','quality']]
+    df = df[['fixed acidity', 'volatile acidity', 'chlorides','total sulfur dioxide','density','sulphates', 'pH', 'residual sugar', 'alcohol','quality']]
     return split(df)
 
 """
@@ -29,12 +30,6 @@ def standardize(df):
         df[column] = (df[column] - mu)/sigma
 
 """
-Function that shuffles the dataset.
-"""
-def shuffle_data(df):
-    return df.reindex(np.random.permutation(df.index))
-
-"""
 Function that splits the dataset into a 60:20:20 split.
 """
 def split(df):
@@ -45,4 +40,4 @@ def split(df):
 Function that splits the input dataframe into its features and targets.
 """
 def get_XY(df):
-    return (df.loc[:, 'fixed acidity':'alcohol'], df['quality']) 
+    return (df.loc[:, 'fixed acidity':'alcohol'], df['quality'])
