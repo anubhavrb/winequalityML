@@ -18,4 +18,4 @@ def run_model(filename):
     return total_score/50
 
 if __name__ == "__main__":
-    print run_model('winequality-white.csv')
+    print run_model('winequality-red.csv')

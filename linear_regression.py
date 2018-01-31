@@ -1,5 +1,6 @@
 from sklearn import linear_model
 from winequality import get_preprocessed_dataset, get_XY
+from sklearn.preprocessing import PolynomialFeatures
 
 def run_model(filename):
 
@@ -11,9 +12,13 @@ def run_model(filename):
         validate_X, validate_Y = get_XY(validate)
 
         regr = linear_model.LinearRegression()
+        #poly = PolynomialFeatures(degree = 4)
+        #poly.fit_transform(train_X, train_Y)
         regr.fit(train_X, train_Y)
+        #poly.fit_transform(validate_X, validate_Y)
 
         total_score = total_score + regr.score(validate_X, validate_Y)
+
 
     return total_score/50
 
