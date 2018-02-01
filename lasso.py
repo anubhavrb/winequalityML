@@ -11,6 +11,7 @@ def run_model(filename):
     train_X, train_Y = get_XY(train)
     validate_X, validate_Y = get_XY(validate)
 
+    #clf = Lasso(alpha=0.1)
     lasso = Lasso(max_iter = 10000)
     clf = GridSearchCV(lasso, parameters)
     clf.fit(train_X, train_Y)

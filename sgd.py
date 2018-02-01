@@ -12,7 +12,6 @@ def run_model(filename):
     validate_X, validate_Y = get_XY(validate)
 
     #clf = SGDRegressor()
-    #clf.fit(train_X, train_Y)
 
     sgd = SGDRegressor()
     clf = GridSearchCV(sgd, parameters)

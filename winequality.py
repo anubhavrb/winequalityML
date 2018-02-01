@@ -11,11 +11,10 @@ def get_preprocessed_dataset(filename):
     target = df['quality']
     df = df.loc[:, 'fixed acidity':'alcohol']
     #df = select_features(df)
-    df = make_poly(df, 2)
+    #df = make_poly(df, 2)
     standardize(df)
     df['quality'] = target
     df = drop_outliers(df)
-    print df
     return split(df)
 
 """
@@ -75,7 +74,7 @@ def make_poly(df, d):
 Function to select features of dataset.
 """
 def select_features(df):
-    df = df[['fixed acidity', 'free sulfur dioxide', 'pH', 'alcohol', 'quality']]
+    df = df[['alcohol', 'volatile acidity', 'sulphates', 'citric acid', 'total sulfur dioxide', 'density']]
     return df
 
 if __name__ == "__main__":

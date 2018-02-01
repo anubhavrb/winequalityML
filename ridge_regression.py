@@ -11,6 +11,7 @@ def run_model(filename):
         train_X, train_Y = get_XY(train)
         validate_X, validate_Y = get_XY(validate)
 
+        #clf = Ridge()
         ridge = Ridge()
         clf = GridSearchCV(ridge, parameters)
         clf.fit(train_X, train_Y)
