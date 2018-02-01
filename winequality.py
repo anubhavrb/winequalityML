@@ -11,7 +11,7 @@ def get_preprocessed_dataset(filename):
     target = df['quality']
     df = df.loc[:, 'fixed acidity':'alcohol']
     #df = select_features(df)
-    #df = make_poly(df, 2)
+    df = make_poly(df, 2)
     standardize(df)
     df['quality'] = target
     df = drop_outliers(df)
