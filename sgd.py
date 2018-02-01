@@ -1,25 +1,28 @@
 from sklearn.linear_model import SGDRegressor
 from winequality import get_preprocessed_dataset, get_XY
 from sklearn.model_selection import GridSearchCV
-from sklearn.preprocessing import PolynomialFeatures
 
 def run_model(filename):
 
-    total_score = 0
+    train, validate, test = get_preprocessed_dataset(filename)
 
+    parameters = {'eta0': [0.001, 0.002, 0.005, 0.01], 'alpha': [0.00001, 0.00002, 0.00005, 0.0001]}
 
-    for i in range(50):
-        train, validate, test = get_preprocessed_dataset(filename)
+    train_X, train_Y = get_XY(train)
+    validate_X, validate_Y = get_XY(validate)
 
-        train_X, train_Y = get_XY(train)
-        validate_X, validate_Y = get_XY(validate)
+    #clf = SGDRegressor()
+    #clf.fit(train_X, train_Y)
 
-        clf = SGDRegressor()
-        clf.fit(train_X, train_Y)
+    sgd = SGDRegressor()
+    clf = GridSearchCV(sgd, parameters)
+    clf.fit(train_X, train_Y)
 
-        total_score = total_score + clf.score(validate_X, validate_Y)
-
-    return total_score/50
+    #return clf.score(validate_X, validate_Y)
+    return clf.score(validate_X, validate_Y)
 
 if __name__ == "__main__":
-    print run_model('winequality-red.csv')
+    total_score = 0
+    for i in range(50):
+        total_score = total_score + run_model('winequality-red.csv')
+    print total_score/50

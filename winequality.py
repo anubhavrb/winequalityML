@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import PolynomialFeatures
+from sklearn.preprocessing import PolynomialFeatures, StandardScaler
 
 """
 Master function that calls the read_file, standardize, and shuffle_data
@@ -8,11 +8,14 @@ functions.
 """
 def get_preprocessed_dataset(filename):
     df = read_file(filename)
-    standardize(df)
-    #df = df[['fixed acidity', 'volatile acidity', 'citric acid', 'chlorides','total sulfur dioxide','density','sulphates','alcohol','quality']]
-    #df = df[['fixed acidity', 'volatile acidity', 'chlorides','total sulfur dioxide','density','sulphates', 'pH', 'residual sugar', 'alcohol','quality']]
+    target = df['quality']
+    df = df.loc[:, 'fixed acidity':'alcohol']
     #df = select_features(df)
+    df = make_poly(df, 2)
+    standardize(df)
+    df['quality'] = target
     df = drop_outliers(df)
+    print df
     return split(df)
 
 """
@@ -26,11 +29,14 @@ def read_file(filename):
 Function to standardize the dataframe using z-scores.
 """
 def standardize(df):
-    for column in df:
-        if column == 'quality':
-            continue
-        mu, sigma = df[column].mean(), df[column].std()
-        df[column] = (df[column] - mu)/sigma
+    # for column in df:
+    #     if column == 'quality':
+    #         continue
+    #     mu, sigma = df[column].mean(), df[column].std()
+    #     df[column] = (df[column] - mu)/sigma
+
+    scaler = StandardScaler()
+    df[list(df)] = scaler.fit_transform(df[list(df)])
 
 """
 Function that splits the dataset into a 60:20:20 split.
@@ -43,7 +49,7 @@ def split(df):
 Function that splits the input dataframe into its features and targets.
 """
 def get_XY(df):
-    return (df.loc[:, 'fixed acidity':'alcohol'], df['quality'])
+    return (df.loc[:, df.columns != 'quality'], df['quality'])
 
 """
 Function that drops outliers >= 3 or <= 3 std. deviations from the mean.
@@ -61,11 +67,9 @@ def drop_outliers(df):
 Function to add polynomial features to dataset.
 """
 def make_poly(df, d):
-    columns = df.columns
     poly = PolynomialFeatures(degree = d)
     transformed = poly.fit_transform(df)
-    labels = [columns[x] for x in transformed.get_support(indices=True) if x]
-    return pd.DataFrame(transformed.fit_transform(df), columns=labels)
+    return pd.DataFrame(transformed, columns=poly.get_feature_names(df.columns))
 
 """
 Function to select features of dataset.
