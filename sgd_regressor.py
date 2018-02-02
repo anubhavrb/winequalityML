@@ -23,5 +23,5 @@ def run_model(filename):
 if __name__ == "__main__":
     total_score = 0
     for i in range(50):
-        total_score = total_score + run_model('winequality-red.csv')
+        total_score = total_score + run_model('winequality-white.csv')
     print total_score/50

@@ -11,7 +11,7 @@ def get_preprocessed_dataset(filename):
     target = df['quality']
     df = df.loc[:, 'fixed acidity':'alcohol']
     #df = select_features(df)
-    df = make_poly(df, 2)
+    #df = make_poly(df, 2)
     standardize(df)
     df['quality'] = target
     df = drop_outliers(df)
@@ -28,12 +28,6 @@ def read_file(filename):
 Function to standardize the dataframe using z-scores.
 """
 def standardize(df):
-    # for column in df:
-    #     if column == 'quality':
-    #         continue
-    #     mu, sigma = df[column].mean(), df[column].std()
-    #     df[column] = (df[column] - mu)/sigma
-
     scaler = StandardScaler()
     df[list(df)] = scaler.fit_transform(df[list(df)])
 
@@ -74,7 +68,7 @@ def make_poly(df, d):
 Function to select features of dataset.
 """
 def select_features(df):
-    df = df[['alcohol', 'volatile acidity', 'sulphates', 'citric acid', 'total sulfur dioxide', 'density']]
+    df = df[['alcohol', 'density', 'chlorides', 'volatile acidity', 'total sulfur dioxide', 'fixed acidity', 'pH', 'residual sugar']]
     return df
 
 if __name__ == "__main__":

@@ -13,7 +13,8 @@ def run_model(filename):
 
     #clf = SGDClassifier()
 
-    sgd = SGDClassifier()
+    sgd = SGDClassifier(n_iter = 1000)
+    #clf = SGDClassifier()
     clf = GridSearchCV(sgd, parameters)
     clf.fit(train_X, train_Y)
 
