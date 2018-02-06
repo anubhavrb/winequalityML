@@ -5,33 +5,33 @@ Given that this is our first project for this class, we decided to stick mostly 
 \begin{itemize}
     \item \textbf{Linear regression} - A straightforward model that focuses on finding the weights associated with the least cost in a linear combination of the features of the dataset. 
     \item \textbf{SGD} - Similar to linear regression, except the entire set of training examples is not evaluated each time a decision about minimizing the cost function is made. Instead, a random training example is chosen, and the minimum point of the cost function is calculated using that randomly chosen training example.
-    \item \textbf{Ridge regression} - A version of linear regression that employs an L-2 regularization strategy. Ridge regression regulates the complexity of the curve used to fit the data by employing a penalty for higher weights. The specific penalty used is called the L-2 penalty and is defined as $\sum_{j=1}^{n} \theta_{j}^{2}$.
-    \item \textbf{LASSO} - Similar to ridge regression, except the regularization penalty used is L-1, which is defined as $\sum_{j=1}^{n} |\theta_{j}|$.
-    \item \textbf{SGDClassifier} - While this model was not talked about in class, it is similar to the regular SGD model in that gradient descent updates are made using single or batches of training examples instead of the whole dataset. However, a major difference is that \textt{SGDClassifier} is used for classification problems. A classification problem is any problem where the target variable can only take on a finite set of discrete values. Since our target variable, quality, can only take on values from 0 to 10 (inclusive), this problem can also be classified as a classification problem. \texttt{SGDClassifier} also makes use of a regularization penalty.
+    \item \textbf{Ridge regression} - A version of linear regression that employs an L-2 regularization strategy. Ridge regression regulates the complexity of the curve used to fit the data by employing a penalty for higher weights. The specific penalty used is called the L-2 penalty and is defined as $$\sum_{j=1}^{n} \theta_{j}^{2}$$.
+    \item \textbf{LASSO} - Similar to ridge regression, except the regularization penalty used is L-1, which is defined as $$\sum_{j=1}^{n} |\theta_{j}|$$.
+    \item \textbf{SGDClassifier} - While this model was not talked about in class, it is similar to the regular SGD model in that gradient descent updates are made using single or batches of training examples instead of the whole dataset. However, a major difference is that \texttt{SGDClassifier} is used for classification problems. A classification problem is any problem where the target variable can only take on a finite set of discrete values. Since our target variable, quality, can only take on values from 0 to 10 (inclusive), this problem can also be considered as a classification problem. \texttt{SGDClassifier} also makes use of a regularization penalty.
 \end{itemize}
-Before any of these models could be run, however, it was necessary that the data went through some preprocessing. We used the \texttt{pandas} Python library to import the data from the files and store them with the appropriate column headers. We used one file to house all the functions needed to preprocess the data, which we called \path{winequality.py}. This file held the \path{read_file}, \path{select_features}, \path{make_poly}, \path{standardize}, \path{drop_outliers}, \path{split}, \path{get_XY}, and \path{get_preprocessed_dataset} functions. 
+Before any of these models could be run, however, it was necessary that the data went through some preprocessing. We used the \texttt{pandas} Python library to import the data from the files and store them with the appropriate column headers. We used one file to house all the functions needed to preprocess the data, which we called \path{winequality.py}. This file held the following functions: \path{read_file}, \path{select_features}, \path{make_poly}, \path{standardize}, \path{drop_outliers}, \path{split}, \path{get_XY}, and \path{get_preprocessed_dataset}.
 \begin{enumerate}
     \item The \path{read_file} function was used to read in the .csv file and store it in a DataFrame object.
-    \item Then, we split the file into the features and the quality, so that we could easily apply some preprocessing functions only to the features dataset.
+    \item Then, we split the file into the features and the quality, since we only wanted to apply some preprocessing functions to the features dataset.
     \item The \path{select_features} function was used to trim down the dataset to only the features we wanted to train the models with. The way we decided which features to use will be explained shortly.
-    \item The \path{make_poly} function used \texttt{PolynomialFeatures} that was also imported from the \texttt{scikit-learn} library. We used \texttt{PolynomialFeatures} to add extra columns to the dataset to simulate higher-order polynomials.
-    \item Then, we used the \path{standardize} function to standardize the dataset using \textt{StandardScaler} from the \texttt{scikit-learn} library.
-    \item The standardized DataFrame had the quality variable added back in and then we dropped all outliers from the dataset. The \path{drop_outliers} function dropped any outliers that weren't within $3$ standard deviations of the mean of any column.
-    \item The \path{split} function split the dataset into a 60-20-20 split to represent the training, validation, and testing datasets.
+    \item The \path{make_poly} function used \texttt{PolynomialFeatures} imported from the \texttt{scikit-learn} library. We used \texttt{PolynomialFeatures} to add extra columns to the dataset to simulate higher-order polynomials.
+    \item The \path{standardize} function was then used to standardize the dataset using \textt{StandardScaler} from the \texttt{scikit-learn} library.
+    \item The standardized DataFrame had the quality variable added back in before we dropped the outliers from the dataset. The \path{drop_outliers} function dropped any outliers that weren't within $3$ standard deviations of the mean of any column.
+    \item The \path{split} function split the dataset into a 60\%-20\%-20\% split to represent the training, validation, and testing datasets.
 \end{enumerate}      
 The \path{get_XY} function accepted a DataFrame as input and returned the features and the target separately. Finally, \path{get_preprocessed_dataset} was a master function that called all of the other functions and returned the preprocessed dataset.\\
 
-To begin the process of feature engineering, we ran some statistical analyses on our datasets. First, we created graphs of quality vs. each feature to see if there were any outliers. A few of the graphs showed some data points that were considerably different from any others (see Figure 1). For example, the citric acid value for entry $152$ of the red wine dataset was $3.7$ standard deviations above the mean for citric acid. According to Wilcox (2001), even a single outlier can mask an otherwise strong correlation between the predictor and the criterion for Pearson's correlation. Keeping this in mind, we decided to drop all outliers from our datasets.\\
+To begin the process of feature selection, we ran some statistical analyses on our datasets. First, we created graphs of quality scores vs. each feature to see if there were any outliers. A few of these graphs can be seen in Figures 1, 2, and 3. All feature data came from the original dataset, prior to standardization, which is why the graphs have different scales. A few of the graphs showed some data points that were considerably different from any others. For example, the citric acid value for entry $152$ of the red wine dataset was $3.7$ standard deviations above the mean for citric acid. Even a single outlier can have a significant effect on the relationship between two variables \cite{aia}. Keeping this in mind, we decided to drop all outliers from our datasets.\\
 \begin{figure}[htb]
 
   \centering  % centers the image in the column
 
   % replace the second argument below with your filename. I like to
   % place all my figures in a sub-directory to keep things organized
-  \includegraphics[width=0.47\textwidth]{Picture2.png}
+  \includegraphics[width=0.42\textwidth]{1.png}
 
   % *Every* figure should have a descriptive caption.
-  \caption{Correlation Between Alcohol and Quality}
+  \caption{Correlation Between Alcohol and Quality for Red Wine}
 
   % The label is a handle you create so that you can refer to this
   % figure (using the \ref{} command) from other parts of your
@@ -51,10 +51,10 @@ To begin the process of feature engineering, we ran some statistical analyses on
 
   % replace the second argument below with your filename. I like to
   % place all my figures in a sub-directory to keep things organized
-  \includegraphics[width=0.47\textwidth]{Picture1.png}
+  \includegraphics[width=0.42\textwidth]{2.png}
 
   % *Every* figure should have a descriptive caption.
-  \caption{Correlation Between Fixed Acidity and Quality}
+  \caption{Correlation Between Fixed Acidity and Quality for Red Wine}
 
   % The label is a handle you create so that you can refer to this
   % figure (using the \ref{} command) from other parts of your
@@ -73,10 +73,10 @@ To begin the process of feature engineering, we ran some statistical analyses on
 
   % replace the second argument below with your filename. I like to
   % place all my figures in a sub-directory to keep things organized
-  \includegraphics[width=0.47\textwidth]{3.png}
+  \includegraphics[width=0.42\textwidth]{3.png}
 
   % *Every* figure should have a descriptive caption.
-  \caption{Correlation Between Total Sulfur Dioxide and Quality}
+  \caption{Correlation Between Total Sulfur Dioxide and Quality for Red Wine}
 
   % The label is a handle you create so that you can refer to this
   % figure (using the \ref{} command) from other parts of your
@@ -90,8 +90,9 @@ To begin the process of feature engineering, we ran some statistical analyses on
 
   \end{figure}
   
-  
-The next step in deciding which features were most important, we computed a Pearson's correlation coefficient between each feature and quality for each dataset. Figures 4 and 5 contain the correlation coefficients we computed, ordered from the strongest to the weakest. We discovered that pH, free sulfur dioxide, and residual sugar showed the weakest correlations with quality for the red wine dataset. Sulphates, citric acid, and free sulfur dioxide showed the weakest correlations with quality for the white wine dataset. Given these results, we ran some experiments excluding some of these features that were weakly correlated with quality. A summary of our experiments and results is provided in the next two sections.
+\newpage
+
+Next, we computed a Pearson's correlation coefficient between each feature and quality for each dataset. Figures 4 and 5 contain the correlation coefficients we computed, ordered from the strongest to the weakest. We discovered that pH, free sulfur dioxide, and residual sugar showed the weakest correlations with quality for the red wine dataset. Sulphates, citric acid, and free sulfur dioxide showed the weakest correlations with quality for the white wine dataset. Given these results, we ran some experiments excluding some of these features that were weakly correlated with quality. A summary of our experiments and results is provided in the next two sections.
 \begin{figure}[htb]
   \centering % centers the entire table
 
@@ -131,7 +132,8 @@ The next step in deciding which features were most important, we computed a Pear
     \end{tabular}
   % As with figures, *every* table should have a descriptive caption
   % and a label for ease of reference.
-  \caption{Feature Correlation with Quality for Red Wine}
+  \caption{Table of Feature Correlation with Quality for Red Wine.}
+  \floatfoot{** indicates the correlation is significant at the 0.01 level, while * indicates the correlation is significant at the 0.05 level.}
   \label{tab:example}
 
 \end{figure}
@@ -175,7 +177,8 @@ The next step in deciding which features were most important, we computed a Pear
     \end{tabular}
   % As with figures, *every* table should have a descriptive caption
   % and a label for ease of reference.
-  \caption{Feature Correlation with Quality for White Wine}
+  \caption{Table of Feature Correlation with Quality for White Wine}
+  \floatfoot{** indicates the correlation is significant at the 0.01 level, while * indicates the correlation is significant at the 0.05 level.}
   \label{tab:example}
 
 

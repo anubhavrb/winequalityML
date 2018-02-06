@@ -10,13 +10,14 @@ def run_model(filename):
 
         train_X, train_Y = get_XY(train)
         validate_X, validate_Y = get_XY(validate)
+        test_X, test_Y = get_XY(test)
 
         ridge = Ridge()
         clf = GridSearchCV(ridge, parameters)
         #clf = Ridge()
         clf.fit(train_X, train_Y)
 
-        return clf.score(validate_X, validate_Y)
+        return clf.score(test_X, test_Y)
 
 if __name__ == "__main__":
     total_score = 0
